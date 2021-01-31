@@ -60,6 +60,14 @@ if __name__ == '__main__':
 				X_imf[i].append(imf)
 				y_imf[i].append(df.iloc[pid]['label'])
 
+			residue = np.pad(residue, (0, rate-len(residue)), 'constant')
+			residue = mfcc(residue,
+				samplerate=config.samplerate,
+				winlen=config.winlen,
+				winstep=config.winstep,
+				numcep=config.numcep,
+				nfilt=config.nfilt,
+				nfft=config.nfft)
 			X_residue.append(residue)
 			y_residue.append(df.iloc[pid]['label'])
 			print('write complete - ' + df.iloc[pid]['fname'])
