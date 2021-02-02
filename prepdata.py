@@ -34,11 +34,12 @@ def get_imfs(pid, df, config):
 
 
 if __name__ == '__main__':
-	config = Config(22050, 0.02, 0.01, 13, 26, 512, 4)
-	X_imf = [[], [], [], [], []]
-	y_imf = [[], [], [], [], []]
-	X_residue, y_residue = [], []
 	df = pd.read_csv('datamaps/datamap.csv')
+	config = Config(22050, 0.02, 0.01, 13, 26, 512, 4)
+	X_imf = [[], [], [], []]
+	y_imf = [[], [], [], []]
+	X_residue, y_residue = [], []
+	X_all, y_all = [[]]*len(df['fname']), []
 
 	with concurrent.futures.ProcessPoolExecutor() as executor:
 		processes = []
@@ -59,6 +60,7 @@ if __name__ == '__main__':
 					nfft=config.nfft)
 				X_imf[i].append(imf)
 				y_imf[i].append(df.iloc[pid]['label'])
+				X_all[pid].append(imf)
 
 			residue = np.pad(residue, (0, rate-len(residue)), 'constant')
 			residue = mfcc(residue,
@@ -70,12 +72,15 @@ if __name__ == '__main__':
 				nfft=config.nfft)
 			X_residue.append(residue)
 			y_residue.append(df.iloc[pid]['label'])
+
+			X_all[pid].append(residue)
+			y_all.append(df.iloc[pid]['label'])
 			print('write complete - ' + df.iloc[pid]['fname'])
 
 	for i in range(config.max_imf):
 		X, y = np.array(X_imf[i]), np.array(y_imf[i])
 		X_out = open('trainable/X_imf'+str(i)+'.pickle', 'wb')
-		pickle.dump(X, X_out)
+		pickle.dump(X, X_out, protocol=4)
 		y_out = open('trainable/y_imf'+str(i)+'.pickle', 'wb')
 		pickle.dump(y, y_out)
 		X_out.close()
@@ -83,9 +88,18 @@ if __name__ == '__main__':
 
 	X, y = np.array(X_residue), np.array(y_residue)
 	X_out = open('trainable/X_residue.pickle', 'wb')
-	pickle.dump(X, X_out)
+	pickle.dump(X, X_out, protocol=4)
 	y_out = open('trainable/y_residue.pickle', 'wb')
-	pickle.dump(y, y_out)
+	pickle.dump(y, y_out, protocol=4)
 	X_out.close()
 	y_out.close()
+
+	X, y = np.array(X_all), np.array(y_all)
+	X_out = open('trainable/X_all.pickle', 'wb')
+	pickle.dump(X, X_out, protocol=4)
+	y_out = open('trainable/y_all.pickle', 'wb')
+	pickle.dump(y, y_out, protocol=4)
+	X_out.close()
+	y_out.close()
+
 	print('data has been written in /trainable')
