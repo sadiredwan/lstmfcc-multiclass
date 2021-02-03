@@ -2,6 +2,7 @@
 /histories
 /log
 /models
+/pid
 /testdata
 /trainable
 plot.py
