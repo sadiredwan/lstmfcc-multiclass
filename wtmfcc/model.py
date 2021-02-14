@@ -66,8 +66,11 @@ class RNN:
 
 
 def make_dataset():
-	dataset = sys.argv[1]
+	dataset = sys.argv[1]+'_'+sys.argv[2]
 	X, y = pickle.load(open('trainable/X_'+dataset+'.pickle', 'rb')), pickle.load(open('trainable/y_wt.pickle', 'rb'))
+	if(sys.argv[1]=='wt'):
+		X = np.reshape(X, (X.shape[0], X.shape[2], X.shape[1], X.shape[3]))
+	
 	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=2)
 	X_test, X_val, y_test, y_val = train_test_split(X_test, y_test, test_size=0.5, random_state=2)
 	pickle.dump(X_test, open('testdata/X_'+dataset+'.pickle', 'wb'))
@@ -112,5 +115,5 @@ if __name__ == '__main__':
 
 	model.summary()
  	
-	pickle.dump(hist.history, open('histories/'+sys.argv[1]+'.pickle', 'wb'))
-	model.save('models/imfcc_model_'+sys.argv[1]+'.h5')
+	pickle.dump(hist.history, open('histories/'+sys.argv[1]+'_'+sys.argv[2]+'.pickle', 'wb'))
+	model.save('models/model_'+sys.argv[1]+'_'+sys.argv[2]+'.h5')

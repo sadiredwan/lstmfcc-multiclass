@@ -5,5 +5,15 @@
 /pid
 /testdata
 /trainable
+/wtmfcc/.spyproject
+/wtmfcc/data
+/wtmfcc/datamaps
+/wtmfcc/histories
+/wtmfcc/log
+/wtmfcc/models
+/wtmfcc/pid
+/wtmfcc/testdata
+/wtmfcc/trainable
+/wtmfcc/plot.py
 plot.py
 thread.py
