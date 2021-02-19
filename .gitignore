@@ -9,11 +9,16 @@
 /wtmfcc/data
 /wtmfcc/datamaps
 /wtmfcc/histories
+/wtmfcc/histories-cwt
 /wtmfcc/log
 /wtmfcc/models
-/wtmfcc/pid
+/wtmfcc/models-cwt
 /wtmfcc/testdata
+/wtmfcc/testdata-cwt
 /wtmfcc/trainable
+/wtmfcc/trainable-cwt
+/wtmfcc/model-cwt.py
 /wtmfcc/plot.py
+/wtmfcc/test.py
 plot.py
 thread.py
