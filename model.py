@@ -79,16 +79,16 @@ def make_dataset():
 if __name__ == '__main__':
 	X_train, X_val, y_train, y_val = make_dataset()
 	n_classes = len(np.unique(y_train))
- 	
+
 	LOG_DIR = 'log/'+f'{int(time.time())}'
- 	
+
 	tuner = RandomSearch(
 		trial,
 		objective='val_acc',
 		max_trials=1,
 		executions_per_trial=1,
 		directory=LOG_DIR)
- 	
+
 	tuner.search(
 		x=X_train,
 		y=y_train,
@@ -96,7 +96,7 @@ if __name__ == '__main__':
 		batch_size=50,
 		shuffle='true',
 		validation_data=(X_val, y_val))
- 	
+
 	model = RNN(
 		input_shape=X_train.shape[1:],
 		output_shape = n_classes,
@@ -111,6 +111,6 @@ if __name__ == '__main__':
 		validation_data=(X_val, y_val))
 
 	model.summary()
- 	
+
 	pickle.dump(hist.history, open('histories/'+sys.argv[1]+'.pickle', 'wb'))
 	model.save('models/imfcc_model_'+sys.argv[1]+'.h5')
